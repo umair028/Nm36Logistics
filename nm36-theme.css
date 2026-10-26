@@ -1,0 +1,656 @@
+/* NM36 Logistics theme overrides (loaded after index.78ddb5e8.css) */
+:root {
+  --nm-navy: #0b2a6b;
+  --nm-navy-deep: #071d45;
+  --nm-blue: #1e5bc6;
+  --nm-sky: #3d8bdb;
+}
+
+/* Explicit page background: sections without their own background (e.g. Why us)
+   otherwise show the browser canvas, which some viewers paint dark */
+html,
+body {
+  background-color: #fff;
+}
+
+/* ---------- Header logo ---------- */
+.header__logo.nm36-logo {
+  height: 6.4rem;
+  align-items: center;
+  text-decoration: none;
+}
+.nm36-logo__img {
+  height: 100%;
+  width: auto;
+  background: #fff;
+  border-radius: 1rem;
+  padding: 0.3rem;
+  box-shadow: 0 0.4rem 1.6rem rgba(7, 29, 69, 0.25);
+}
+.nm36-logo__text {
+  display: none;
+  flex-direction: column;
+  line-height: 1;
+  color: rgba(var(--header-txt), 1);
+  transition: color 0.4s;
+}
+.header.mix-mode .nm36-logo__text,
+.header.invert-mode .nm36-logo__text {
+  color: #fff;
+}
+.nm36-logo__mark {
+  font-family: "Kaushan Script", cursive;
+  font-size: 3.4rem;
+}
+.nm36-logo__sub {
+  font-family: "Kaushan Script", cursive;
+  font-size: 1.6rem;
+  color: var(--nm-sky);
+  margin-left: 0.4rem;
+}
+@media (max-width: 767px) {
+  .header__logo.nm36-logo { height: 4.4rem; }
+}
+
+/* ---------- Preloader logo ---------- */
+.trans__logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 1.6rem;
+  padding: 0.6rem;
+}
+
+/* ---------- Hero: centered ship video ---------- */
+.home-hero__bg-wrap {
+  background-color: var(--nm-navy-deep);
+}
+.home-hero__bg-wrap .home-hero__bg-wrap-inner {
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  overflow: hidden;
+  transform: none !important;
+}
+.home-hero__bg-wrap .home-hero__bg-vid {
+  opacity: 1;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: auto;
+}
+.home-hero__bg-wrap .home-hero__bg-ph {
+  display: block;
+  opacity: 1;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.home-hero__bg-wrap .home-hero__bg-vid { z-index: 1; }
+/* old kite ship (image + 3D canvas) */
+.home-hero__bg-wrap .home-hero__bg-ship,
+.home-hero__canvas {
+  display: none !important;
+}
+/* navy tint so the headline stays readable */
+.home-hero__bg-wrap-inner:before {
+  opacity: 1;
+  height: 100%;
+  top: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(7, 29, 69, 0.85) 0%,
+    rgba(7, 29, 69, 0.45) 45%,
+    rgba(7, 29, 69, 0.2) 70%,
+    rgba(7, 29, 69, 0.6) 100%
+  );
+}
+.home-hero__bg-wrap-inner:after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 35%;
+  z-index: 2;
+  background: linear-gradient(rgba(7, 29, 69, 0) 0%, rgba(7, 29, 69, 0.7) 100%);
+}
+
+/* lighter blue for highlights sitting on the dark hero */
+.home-hero .txt-hl {
+  color: #7cb8ff;
+}
+
+/* footer "let's discuss" band */
+.footer__marquee {
+  background-color: var(--nm-navy);
+}
+
+/* ---------- Marquee band (from reference "focused" section) ---------- */
+.nm-focused {
+  position: relative;
+  z-index: 3;
+  background-color: #fff;
+  padding-top: 10rem;
+  overflow: hidden;
+}
+.nm-marquee {
+  display: flex;
+  overflow: hidden;
+}
+.nm-marquee__track {
+  display: flex;
+  flex-shrink: 0;
+  will-change: transform;
+  animation: nm-marquee var(--nm-marquee-duration, 20s) linear infinite;
+  animation-play-state: paused;
+}
+.nm-marquee.is-running .nm-marquee__track {
+  animation-play-state: running;
+}
+@keyframes nm-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+.nm-focused__text {
+  flex-shrink: 0;
+  padding-inline: 0.14em;
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-weight: 500;
+  font-size: 20.8rem;
+  line-height: 1.21;
+  letter-spacing: -0.02em;
+  color: var(--nm-blue);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* ---------- About Us (from reference "about" section) ---------- */
+.nm-about {
+  position: relative;
+  z-index: 3;
+  background-color: #fff;
+  padding-top: 14rem;
+}
+.nm-about__label {
+  color: #9a9a9a;
+}
+.nm-about__head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 2.3rem;
+  padding-bottom: 4.4rem;
+}
+.nm-about__head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1.5rem;
+  border: 1px solid rgba(11, 26, 60, 0.2);
+  border-bottom: none;
+}
+.nm-about__title {
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-weight: 500;
+  font-size: 5.8rem;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: #0b1a3c;
+}
+.nm-about__btn {
+  flex-shrink: 0;
+}
+.nm-about__content {
+  display: flex;
+  align-items: center;
+  padding-block: 3.3rem;
+}
+.nm-about__left {
+  width: 100%;
+  max-width: 65rem;
+  padding-top: 2rem;
+}
+.nm-about__right {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-left: 2.5rem;
+}
+
+/* text swaps with a cross-fade when a circle is hovered */
+.nm-about__slides {
+  display: grid;
+}
+.nm-about__fill {
+  grid-area: 1 / 1;
+  position: relative;
+  max-width: 28em;
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-size: 2.6rem;
+  line-height: 1.38;
+  letter-spacing: -0.01em;
+  color: #8790a3;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s, visibility 0.4s;
+}
+.nm-about__fill.is-active {
+  opacity: 1;
+  visibility: visible;
+}
+.nm-about__fill::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #0b1a3c;
+}
+
+.nm-about__list-title {
+  margin-top: 9.4rem;
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-weight: 500;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  color: #9a9a9a;
+}
+.nm-about__list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 2.8rem -0.4rem 0;
+  padding: 0;
+  list-style: none;
+}
+.nm-about__item {
+  flex: 0 0 calc(50% - 0.8rem);
+  margin: 0.4rem;
+}
+.nm-stat {
+  position: relative;
+  height: 100%;
+  min-height: 19.9rem;
+  padding: 1.2rem 2rem;
+  overflow: hidden;
+  border-radius: 3rem;
+  background: #eef2f8;
+}
+.nm-stat__art {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 15rem;
+  transform: translate(18%, 20%);
+}
+.nm-stat__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.nm-stat__body {
+  position: relative;
+  z-index: 2;
+}
+.nm-stat__title {
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-weight: 700;
+  font-size: 5.2rem;
+  line-height: 1.3;
+  color: #0b1a3c;
+}
+.nm-stat__text {
+  max-width: 12em;
+  margin-top: 0.5rem;
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: #8790a3;
+}
+
+/* looping card illustrations (stand-ins for the reference's 3D videos) */
+.nm-art-float { animation: nm-art-float 3s ease-in-out infinite alternate; }
+.nm-art-spin-x { transform-box: fill-box; transform-origin: center; animation: nm-art-spin-x 4s ease-in-out infinite alternate; }
+.nm-art-delay { animation-delay: -2s; }
+.nm-art-hand-slow,
+.nm-art-hand-fast { transform-origin: 60px 60px; animation: nm-art-turn 12s linear infinite; }
+.nm-art-hand-fast { animation-duration: 3s; }
+.nm-art-ring { transform-box: fill-box; transform-origin: center; animation: nm-art-ring 2s ease-out infinite; }
+@keyframes nm-art-float { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+@keyframes nm-art-spin-x { from { transform: scaleX(1); } to { transform: scaleX(0.15); } }
+@keyframes nm-art-turn { to { transform: rotate(360deg); } }
+@keyframes nm-art-ring { from { transform: scale(0.5); opacity: 1; } to { transform: scale(1.2); opacity: 0; } }
+
+/* nested circle graph */
+.nm-graph {
+  width: 100%;
+  max-width: 62.5rem;
+}
+.nm-graph__box {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+}
+.nm-circle {
+  position: absolute;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  transition: border-color 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+.nm-circle:nth-child(1) { background: #f1f5fb; }
+.nm-circle:nth-child(2) { background: #e6edf8; }
+.nm-circle:nth-child(3) { background: #d6e2f4; }
+.nm-circle:nth-child(4) { background: #f1f5fb; }
+.nm-circle:not(:first-child):hover {
+  border-color: rgba(11, 26, 60, 0.2);
+  cursor: pointer;
+}
+.nm-circle:not(:first-child):hover ~ .nm-circle { opacity: 0.6; }
+.nm-circle:not(:first-child):hover ~ .nm-circle:nth-child(4) { opacity: 0.3; }
+
+.nm-point {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  transform: translate(50%, -50%);
+  opacity: 0;
+  visibility: hidden;
+}
+.nm-point::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #0b1a3c;
+}
+.nm-point::after {
+  content: attr(data-label);
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #0b1a3c;
+  white-space: nowrap;
+}
+.nm-point--main {
+  width: 12px;
+  height: 12px;
+  opacity: 1;
+  visibility: visible;
+}
+.nm-point--main::before {
+  background: var(--nm-blue);
+  box-shadow: 0 0 0 12px rgba(30, 91, 198, 0.12);
+  animation: nm-pulse 2s ease infinite;
+}
+.nm-point--main::after {
+  top: -18px;
+  transform: translateY(-100%);
+}
+.nm-circle:hover .nm-point {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+}
+@keyframes nm-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(30, 91, 198, 0.25); }
+  70% { box-shadow: 0 0 0 20px rgba(30, 91, 198, 0); }
+  71%, 100% { box-shadow: 0 0 0 0 rgba(30, 91, 198, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nm-art-float, .nm-art-spin-x, .nm-art-hand-slow, .nm-art-hand-fast, .nm-art-ring,
+  .nm-point--main::before { animation: none; }
+}
+
+@media screen and (max-width: 991px) {
+  .nm-about { padding-top: 8rem; }
+  .nm-about__content { flex-direction: column; }
+  .nm-about__left { max-width: 70rem; padding-top: 0; }
+  .nm-about__right { display: none; }
+  .nm-about__list-title { margin-top: 5rem; }
+}
+@media screen and (max-width: 767px) {
+  .nm-about { padding-top: 6rem; }
+  .nm-about__title { font-size: 4.6rem; }
+  .nm-about__btn { display: none; }
+  .nm-about__content { padding-top: 2.8rem; }
+}
+@media screen and (max-width: 476px) {
+  .nm-about__title { font-size: 3.2rem; }
+  .nm-about__head { padding-bottom: 3rem; }
+  .nm-about__fill { font-size: 1.8rem; }
+  .nm-about__list-title { font-size: 1.6rem; }
+  .nm-about__list { margin: 2.6rem -0.3rem 0; }
+  .nm-about__item { flex-basis: calc(50% - 0.6rem); margin: 0.3rem; }
+  .nm-stat { min-height: 15rem; padding: 1.2rem; border-radius: 1.7rem; }
+  .nm-stat__art { width: 9rem; }
+  .nm-stat__title { font-size: 3.4rem; }
+  .nm-stat__text { margin-top: 0.3rem; font-size: 1.2rem; }
+}
+
+/* "Shifting the paradigm" now follows Why us instead of the ship photo, so it no
+   longer tucks its bottom under the next section (nothing opaque covers it now) */
+.home-shift {
+  z-index: 5;
+  margin-bottom: 0;
+}
+
+/* Hero partner row: placeholder logos share one height */
+.home-hero__backer-item,
+.home-hero__backer-item:nth-child(n) {
+  height: 2.4rem;
+}
+.home-hero__backer-item img {
+  opacity: 0.85;
+}
+@media screen and (max-width: 767px) {
+  .home-hero__backer-item,
+  .home-hero__backer-item:nth-child(n) {
+    height: 1.8rem;
+  }
+}
+
+/* ---------- Hero quote / tracking card ---------- */
+.home-hero__sub {
+  display: none; /* old Cargokite copy; the quote card takes this spot */
+}
+.nm-quote {
+  grid-area: 1 / 10 / 3 / 17;
+  align-self: center;
+  justify-self: end;
+  width: 100%;
+  max-width: 50rem;
+  margin-top: 8rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 2.4rem 6rem rgba(7, 29, 69, 0.35);
+  font-family: HelveticaNowDisplay, sans-serif;
+  color: #0b1a3c;
+}
+.nm-quote__tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #eef2f8;
+}
+.nm-quote__tab {
+  padding: 1.8rem 1rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  font: inherit;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #5b6782;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+}
+.nm-quote__tab:hover {
+  color: #0b1a3c;
+}
+.nm-quote__tab.is-active {
+  background: #fff;
+  border-bottom-color: var(--nm-blue);
+  color: #0b1a3c;
+}
+.nm-quote__tab:focus-visible,
+.nm-quote__submit:focus-visible {
+  outline: 2px solid var(--nm-blue);
+  outline-offset: -4px;
+}
+.nm-quote__panel {
+  padding: 2.4rem 2.4rem 2rem;
+}
+.nm-quote__panel[hidden] {
+  display: none;
+}
+.nm-quote__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem 1.4rem;
+}
+.nm-quote__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  min-width: 0;
+}
+.nm-quote__field--wide {
+  grid-column: 1 / -1;
+}
+.nm-quote__label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #3b4763;
+}
+.nm-quote__input {
+  width: 100%;
+  height: 4.8rem;
+  padding: 0 1.4rem;
+  border: 1px solid #d3dcea;
+  border-radius: 0.6rem;
+  background-color: #fff;
+  font: inherit;
+  font-size: 1.5rem;
+  color: #0b1a3c;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+select.nm-quote__input {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 3.6rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%230b2a6b' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.4rem center;
+  background-size: 1.2rem auto;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.nm-quote__input::placeholder {
+  color: #8f9ab0;
+}
+.nm-quote__input:hover {
+  border-color: #aebcd3;
+}
+.nm-quote__input:focus {
+  outline: none;
+  border-color: var(--nm-blue);
+  box-shadow: 0 0 0 3px rgba(30, 91, 198, 0.15);
+}
+.nm-quote__input.is-invalid {
+  border-color: #d64545;
+}
+.nm-quote__submit {
+  width: 100%;
+  height: 5.4rem;
+  margin-top: 2.2rem;
+  border: 0;
+  border-radius: 0.6rem;
+  background: var(--nm-navy);
+  font: inherit;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.nm-quote__submit:hover {
+  background: var(--nm-blue);
+}
+.nm-quote__note {
+  margin-top: 1.4rem;
+  font-size: 1.3rem;
+  text-align: center;
+  color: #6b7790;
+}
+.nm-quote__popup {
+  display: none;
+}
+
+@media screen and (max-width: 991px) {
+  .home-hero {
+    height: auto;
+    min-height: 0;
+  }
+  .home-hero .container.grid {
+    grid-template-rows: auto auto auto;
+    row-gap: 4rem;
+  }
+  .nm-quote {
+    grid-area: 2 / 1 / 3 / 13;
+    justify-self: start;
+    max-width: 62rem;
+    margin-top: 0;
+  }
+  .home-hero__backer {
+    grid-area: 3 / 1 / 4 / 13;
+  }
+  .nm-quote__input { font-size: 1.6rem; }
+}
+@media screen and (max-width: 767px) {
+  .home-hero__wrap {
+    height: auto;
+    min-height: 100svh;
+  }
+  .nm-quote {
+    grid-area: 2 / 1 / 3 / 3;
+    max-width: none;
+  }
+  .home-hero__backer {
+    grid-area: 3 / 1 / 4 / 3;
+  }
+  .nm-quote__tab { font-size: 2rem; padding: 2.2rem 1rem; }
+  .nm-quote__panel { padding: 3rem 3rem 2.6rem; }
+  .nm-quote__grid { gap: 2rem 1.8rem; }
+  .nm-quote__label { font-size: 1.7rem; }
+  .nm-quote__input { height: 6rem; font-size: max(16px, 1.9rem); } /* iOS zooms fields under 16px */
+  .nm-quote__submit { height: 6.6rem; font-size: 2rem; }
+  .nm-quote__note { font-size: 1.6rem; }
+}
+@media screen and (max-width: 476px) {
+  .nm-quote__tab { font-size: 1.5rem; padding: 1.6rem 0.8rem; }
+  .nm-quote__panel { padding: 2rem 1.6rem 1.8rem; }
+  .nm-quote__grid { gap: 1.4rem 1rem; }
+  .nm-quote__label { font-size: 1.3rem; }
+  .nm-quote__input { height: 4.6rem; padding: 0 1.1rem; font-size: max(16px, 1.5rem); }
+  select.nm-quote__input { padding-right: 3rem; background-position: right 1rem center; }
+  .nm-quote__submit { height: 5rem; font-size: 1.5rem; }
+  .nm-quote__note { font-size: 1.2rem; }
+}
