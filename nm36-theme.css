@@ -264,58 +264,87 @@ body {
   color: #9a9a9a;
 }
 .nm-about__list {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 2.8rem -0.4rem 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.2rem;
+  margin: 2.8rem 0 0;
   padding: 0;
   list-style: none;
 }
-.nm-about__item {
-  flex: 0 0 calc(50% - 0.8rem);
-  margin: 0.4rem;
-}
+/* stat tile: icon chip, then figure and label; figures line up across a row */
 .nm-stat {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
   height: 100%;
-  min-height: 19.9rem;
-  padding: 1.2rem 2rem;
+  min-height: 22rem;
+  padding: 2.4rem 2.6rem 2.6rem;
   overflow: hidden;
-  border-radius: 3rem;
-  background: #eef2f8;
+  border: 1px solid #e3e9f3;
+  border-radius: 2.4rem;
+  background: linear-gradient(160deg, #f7f9fd 0%, #eef3fa 100%);
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s, border-color 0.4s;
+}
+/* navy wash that rises on hover, same feel as the service cards */
+.nm-stat::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at 100% 0%, rgba(61, 139, 219, 0.45), transparent 70%),
+    var(--nm-navy);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.nm-stat:hover {
+  transform: translateY(-4px);
+  border-color: var(--nm-navy);
+  box-shadow: 0 2rem 4rem rgba(11, 42, 107, 0.18);
+}
+.nm-stat:hover::before {
+  opacity: 1;
 }
 .nm-stat__art {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  position: relative;
   z-index: 1;
-  width: 15rem;
-  transform: translate(18%, 20%);
+  width: 7.2rem;
+  height: 7.2rem;
+  padding: 1rem;
+  border-radius: 1.8rem;
+  background: #fff;
+  box-shadow: 0 0.6rem 1.6rem rgba(11, 42, 107, 0.08);
 }
 .nm-stat__art svg {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   overflow: visible;
 }
 .nm-stat__body {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 .nm-stat__title {
   font-family: HelveticaNowDisplay, sans-serif;
   font-weight: 700;
-  font-size: 5.2rem;
-  line-height: 1.3;
+  font-size: 5.6rem;
+  line-height: 1;
+  letter-spacing: -0.03em;
   color: #0b1a3c;
+  transition: color 0.4s;
 }
 .nm-stat__text {
-  max-width: 12em;
-  margin-top: 0.5rem;
+  max-width: 16em;
+  margin-top: 1rem;
   font-family: HelveticaNowDisplay, sans-serif;
-  font-size: 1.4rem;
-  line-height: 1.25;
-  color: #8790a3;
+  font-size: max(13px, 1.6rem);
+  line-height: 1.35;
+  color: #5b6680;
+  transition: color 0.4s;
 }
+.nm-stat:hover .nm-stat__title { color: #fff; }
+.nm-stat:hover .nm-stat__text { color: rgba(255, 255, 255, 0.72); }
 
 /* looping card illustrations (stand-ins for the reference's 3D videos) */
 .nm-art-float { animation: nm-art-float 3s ease-in-out infinite alternate; }
@@ -437,12 +466,11 @@ body {
   .nm-about__head { padding-bottom: 3rem; }
   .nm-about__fill { font-size: 1.8rem; }
   .nm-about__list-title { font-size: 1.6rem; }
-  .nm-about__list { margin: 2.6rem -0.3rem 0; }
-  .nm-about__item { flex-basis: calc(50% - 0.6rem); margin: 0.3rem; }
-  .nm-stat { min-height: 15rem; padding: 1.2rem; border-radius: 1.7rem; }
-  .nm-stat__art { width: 9rem; }
+  .nm-about__list { gap: 0.8rem; margin-top: 2.2rem; }
+  .nm-stat { gap: 2rem; min-height: 0; padding: 1.4rem 1.4rem 1.6rem; border-radius: 1.6rem; }
+  .nm-stat__art { width: 4.4rem; height: 4.4rem; padding: 0.6rem; border-radius: 1.1rem; }
   .nm-stat__title { font-size: 3.4rem; }
-  .nm-stat__text { margin-top: 0.3rem; font-size: 1.2rem; }
+  .nm-stat__text { margin-top: 0.6rem; font-size: 1.3rem; }
 }
 
 /* "Shifting the paradigm" now follows Why us instead of the ship photo, so it no
@@ -728,37 +756,12 @@ select.nm-quote__input {
   width: 100%;
   height: 5.6rem;
   margin-top: 2.2rem;
-  overflow: hidden;
-  border: 0;
-  border-radius: 1.2rem;
-  background: linear-gradient(135deg, var(--nm-navy) 0%, var(--nm-blue) 100%);
   font: inherit;
   font-size: max(15px, 1.6rem);
   font-weight: 500;
-  color: #fff;
   cursor: pointer;
-  box-shadow: 0 1.2rem 2.8rem rgba(30, 91, 198, 0.35);
-  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.3s;
 }
-/* light sweep across the button on hover */
-.nm-quote__submit::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -60%;
-  width: 40%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.nm-quote__submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 1.6rem 3.2rem rgba(30, 91, 198, 0.45);
-}
-.nm-quote__submit:hover::before {
-  left: 120%;
-}
+/* shape, colours and hover come from the shared button block in nm36-content.css */
 .nm-quote__submit svg {
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
@@ -843,4 +846,13 @@ select.nm-quote__input {
   .nm-quote__grid { gap: 1.4rem 1rem; }
   .nm-quote__input { height: 4.8rem; padding-left: 4rem; font-size: max(16px, 1.5rem); }
   .nm-quote__submit { height: 5.2rem; }
+}
+
+/* Small-ship fleet after cropping the kites out of the drawing:
+   the white backing used to start after the first ship's kite (13.79%), now at the hull */
+.home-shift__main-part--small-ship .container.fluid .home-shift__img-wrap:after {
+  left: 0;
+}
+.home-shift__main-part--small-ship .container.fluid .home-shift__img-wrap .home-shift__img-inner .home-shift__img-inner-ships {
+  column-gap: 6rem;
 }

@@ -590,7 +590,45 @@
     });
   }
 
+  // "Trusted by" logo rows. Their original animation was started by the Cargokite CMS loader,
+  // which is disabled, so each row gets a duplicated track that loops with CSS.
+  function setupPartners(section) {
+    var rows = section.querySelectorAll(".home-part__marquee-wrapper");
+    rows.forEach(function (row) {
+      var item = row.querySelector(".home-part__marquee-item");
+      if (!item || row.querySelector("[data-nm-clone]")) return;
+      var clone = item.cloneNode(true);
+      clone.setAttribute("data-nm-clone", "");
+      clone.setAttribute("aria-hidden", "true");
+      clone.querySelectorAll("img").forEach(function (img) { img.alt = ""; });
+      row.appendChild(clone);
+      // keep a steady speed (~45px/s) whatever the logo count or screen size
+      var setSpeed = function () {
+        // cell widths as the original script set them: 6 / 5 / 3 per container width
+        var container = section.querySelector(".container");
+        var vw = window.innerWidth;
+        var perView = vw <= 476 ? 2 : vw <= 767 ? 3 : vw <= 991 ? 5 : 6;
+        if (container) {
+          var cw = container.getBoundingClientRect().width / perView;
+          row.querySelectorAll(".home-part__main-item").forEach(function (cell) { cell.style.width = cw + "px"; });
+        }
+        var w = item.getBoundingClientRect().width || 1;
+        row.style.setProperty("--nm-part-dur", Math.max(20, w / 45) + "s");
+      };
+      setSpeed();
+      window.addEventListener("resize", setSpeed);
+      row.querySelectorAll("img").forEach(function (img) { if (!img.complete) img.addEventListener("load", setSpeed, { once: true }); });
+      row.classList.add("nm-part-run");
+    });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        section.classList.toggle("nm-part-paused", !entries[0].isIntersecting);
+      }).observe(section);
+    }
+  }
+
   function init() {
+    document.querySelectorAll(".home-part").forEach(setupPartners);
     document.querySelectorAll("[data-nm-marquee]").forEach(setupMarquee);
     document.querySelectorAll("[data-nm-graph]").forEach(setupGraph);
     document.querySelectorAll("[data-nm-book]").forEach(setupBooking);

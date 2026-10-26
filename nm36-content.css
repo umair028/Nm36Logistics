@@ -69,13 +69,6 @@
 .nm-hero-lead__btn--ghost {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  color: #fff;
-  transition: background-color 0.3s, border-color 0.3s;
-}
-.nm-hero-lead__btn--ghost:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: #fff;
 }
 .nm-hero-lead__checks {
   display: flex;
@@ -104,7 +97,28 @@
   grid-area: 3 / 1 / 4 / 9;
 }
 .nm-quote {
-  grid-area: 1 / 10 / 4 / 17;
+  grid-area: 1 / 10 / 3 / 17;
+}
+/* promise line under the quote card, level with the partner logos */
+.nm-hero-promise {
+  grid-area: 2 / 10 / 4 / 17; /* the logo row is fixed-height, so span upward and sit on its baseline */
+  align-self: end;
+  justify-self: end;
+  /* a narrow block (four short lines), centred under the quote card */
+  width: 17em;
+  max-width: 100%;
+  margin-right: calc((max(52rem, 410px) - 17em) / 2);
+  text-align: center;
+  font-family: HelveticaNowDisplay, sans-serif;
+  font-size: max(15px, 2.1rem);
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: #fff;
+  animation: nm-quote-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.6s both;
+}
+.nm-hero-promise__hl {
+  color: #7cb8ff;
 }
 
 /* ---------- Why NM36 extras ---------- */
@@ -878,29 +892,10 @@
   align-items: center;
   gap: 0.6rem;
   padding: 1.1rem 1.8rem;
-  border: 0;
-  border-radius: 0.8rem;
-  background: var(--nm-blue);
   font: inherit;
   font-size: max(13px, 1.5rem);
   font-weight: 500;
-  color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s var(--nm-ease), box-shadow 0.3s;
-}
-.nm-board__btn:hover {
-  background: var(--nm-navy);
-  transform: translateY(-2px);
-  box-shadow: 0 0.8rem 1.8rem rgba(11, 42, 107, 0.25);
-}
-.nm-board__btn--wait {
-  border: 1px solid #c4cfe0;
-  background: #fff;
-  color: #3b4763;
-}
-.nm-board__btn--wait:hover {
-  background: var(--nm-soft);
-  box-shadow: none;
 }
 .nm-board__empty {
   padding: 3rem 2.8rem;
@@ -1407,36 +1402,17 @@
   align-items: center;
   gap: 1rem;
   padding: 1.5rem 2.8rem;
-  border: 1px solid #c4cfe0;
-  border-radius: 1rem;
-  background: #fff;
   font: inherit;
   font-size: max(14px, 1.6rem);
   font-weight: 500;
-  color: var(--nm-ink);
   cursor: pointer;
-  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s, transform 0.3s var(--nm-ease);
 }
 .nm-book__back:disabled {
   visibility: hidden;
 }
-.nm-book__back:hover {
-  background: var(--nm-soft);
-}
-.nm-book__next {
-  border-color: var(--nm-navy);
-  background: var(--nm-navy);
-  color: #fff;
-}
 .nm-book__next::after {
   content: "→";
   transition: transform 0.3s var(--nm-ease);
-}
-.nm-book__next:hover {
-  border-color: var(--nm-blue);
-  background: var(--nm-blue);
-  box-shadow: 0 1rem 2.4rem rgba(30, 91, 198, 0.3);
-  transform: translateY(-2px);
 }
 .nm-book__next:hover::after {
   transform: translateX(0.4rem);
@@ -1607,7 +1583,8 @@
   .nm-svc { min-height: 30rem; }
 }
 @media screen and (max-width: 991px) {
-  .home-hero .container.grid { grid-template-rows: auto auto auto auto; }
+  .home-hero .container.grid { grid-template-rows: auto auto auto auto auto; }
+  .nm-hero-promise { grid-area: 5 / 1 / 6 / 13; justify-self: start; margin-right: 0; text-align: left; }
   .nm-hero-eyebrow { grid-area: 1 / 1 / 2 / 13; margin-top: calc(18vh - 4.2rem); }
   .home-hero__title { margin-top: 18vh; }
   .nm-hero-lead { grid-area: 2 / 1 / 3 / 13; }
@@ -1632,6 +1609,7 @@
   .nm-hero-lead { grid-area: 2 / 1 / 3 / 3; margin-bottom: 3rem; }
   .nm-quote { grid-area: 3 / 1 / 4 / 3; }
   .home-hero__backer { grid-area: 4 / 1 / 5 / 3; }
+  .nm-hero-promise { grid-area: 5 / 1 / 6 / 3; font-size: max(15px, 1.8rem); }
   .nm-sec { padding: 7rem 0; }
   .nm-sec__title { font-size: 4.4rem; }
   .nm-services__grid { grid-template-columns: 1fr; }
@@ -1690,4 +1668,173 @@
   .nm-book__panel.is-active,
   .nm-book__error { animation: none; }
   .nm-svc::before { transition: none; }
+}
+
+/* ---------- "Trusted by" logo rows ---------- */
+.home-part__main-supporters .home-part__marquee-wrapper.nm-part-run {
+  justify-content: flex-start;
+  width: max-content;
+  animation: nm-part-left var(--nm-part-dur, 40s) linear infinite;
+}
+.home-part__main-supporters .home-part__marquee-wrapper.--right.nm-part-run {
+  animation-name: nm-part-right;
+}
+.home-part__main-supporters .home-part__marquee:hover .nm-part-run,
+.nm-part-paused .nm-part-run {
+  animation-play-state: paused;
+}
+@keyframes nm-part-left {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes nm-part-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+.home-part__main-supporters .home-part__main-item img {
+  transition: transform 0.4s var(--nm-ease), opacity 0.4s;
+}
+.home-part__main-supporters .home-part__marquee:hover .home-part__main-item img {
+  opacity: 0.55;
+}
+.home-part__main-supporters .home-part__marquee .home-part__main-item:hover img {
+  opacity: 1;
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-part__main-supporters .home-part__marquee-wrapper.nm-part-run { animation: none; }
+}
+/* placeholder logos inherit the old 229x129 box; size them by height instead */
+.home-part__main-supporters .home-part__main-item img {
+  width: auto;
+  max-width: 100%;
+  height: max(22px, 2.8rem);
+}
+.home-part__main-supporters .home-part__marquee-item .home-part__main-item {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+}
+
+/* ---------- Buttons: one shape, one hover ----------
+   Every button shares the radius, a lift with shadow, and a light sweep.
+   Primary = filled blue; secondary = outlined. */
+:root {
+  --nm-btn-radius: 1.2rem;
+}
+.btn,
+.nm-hero-lead__btn--ghost,
+.nm-quote__submit,
+.nm-board__btn,
+.nm-book__back,
+.nm-book__next {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: var(--nm-btn-radius);
+  box-shadow: none;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.3s var(--nm-ease), opacity 0.4s;
+}
+.btn::before,
+.nm-hero-lead__btn--ghost::before,
+.nm-quote__submit::before,
+.nm-board__btn::before,
+.nm-book__back::before,
+.nm-book__next::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  z-index: -1;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s var(--nm-ease);
+}
+.btn::after {
+  display: none; /* the template's second colour wipe */
+}
+.btn:hover::before,
+.nm-hero-lead__btn--ghost:hover::before,
+.nm-quote__submit:hover::before,
+.nm-board__btn:hover::before,
+.nm-book__back:hover::before,
+.nm-book__next:hover::before {
+  left: 120%;
+  transform: skewX(-20deg);
+}
+.btn:hover,
+.nm-hero-lead__btn--ghost:hover,
+.nm-quote__submit:hover,
+.nm-board__btn:hover,
+.nm-book__back:hover,
+.nm-book__next:hover {
+  transform: translateY(-2px);
+}
+
+/* primary */
+.btn.btn-pri,
+.nm-quote__submit,
+.nm-board__btn,
+.nm-book__next {
+  border-color: var(--nm-blue);
+  background: var(--nm-blue);
+  color: #fff;
+}
+/* a deeper blue rather than navy, so the hover still reads on the dark hero */
+.btn.btn-pri:hover,
+.nm-quote__submit:hover,
+.nm-board__btn:hover,
+.nm-book__next:hover {
+  border-color: #1649a6;
+  background: #1649a6;
+  box-shadow: 0 1.2rem 2.8rem rgba(30, 91, 198, 0.4);
+}
+
+/* secondary on dark (hero) */
+.nm-hero-lead__btn--ghost {
+  border-color: rgba(255, 255, 255, 0.55);
+  background: transparent;
+  color: #fff;
+}
+.nm-hero-lead__btn--ghost:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.25);
+}
+
+/* secondary on light */
+.nm-board__btn--wait,
+.nm-book__back {
+  border-color: #c4cfe0;
+  background: #fff;
+  color: var(--nm-ink);
+}
+.nm-board__btn--wait::before,
+.nm-book__back::before {
+  background: linear-gradient(90deg, transparent, rgba(30, 91, 198, 0.12), transparent);
+}
+.nm-board__btn--wait:hover,
+.nm-book__back:hover {
+  border-color: var(--nm-blue);
+  background: #fff;
+  color: var(--nm-blue);
+  box-shadow: 0 1.2rem 2.4rem rgba(11, 42, 107, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .nm-hero-lead__btn--ghost,
+  .nm-quote__submit,
+  .nm-board__btn,
+  .nm-book__back,
+  .nm-book__next { transform: none !important; }
+  .btn::before,
+  .nm-hero-lead__btn--ghost::before,
+  .nm-quote__submit::before,
+  .nm-board__btn::before,
+  .nm-book__back::before,
+  .nm-book__next::before { display: none; }
 }
