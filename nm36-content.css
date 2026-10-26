@@ -92,8 +92,7 @@
   align-items: center;
   gap: 0.8rem;
 }
-.nm-hero-lead__checks li::before,
-.nm-why__includes li::before {
+.nm-hero-lead__checks li::before {
   content: "";
   flex-shrink: 0;
   width: 1.6rem;
@@ -117,36 +116,75 @@
   line-height: 1.5;
   color: var(--nm-muted);
 }
+/* the site's title spacing was built for a title + button only */
+.home-why__head .home-why__title {
+  margin-bottom: 0;
+}
+.nm-why__sub {
+  margin-top: 2.4rem;
+}
+.home-why__head .home-why__btn {
+  margin-top: 3.2rem;
+}
 .nm-why__includes {
   width: 100%;
-  max-width: 46rem;
-  margin-top: 4rem;
-  padding: 2.8rem 3rem;
-  border-radius: var(--nm-radius);
-  background: linear-gradient(160deg, var(--nm-navy), #143c8c);
-  color: #fff;
+  max-width: 59rem;
+  margin-top: 6rem;
+  padding-top: 3.2rem;
+  border-top: 1px solid var(--nm-line);
   font-family: HelveticaNowDisplay, sans-serif;
 }
 .nm-why__includes-title {
-  margin-bottom: 1.6rem;
-  font-size: max(16px, 2rem);
+  margin-bottom: 2.4rem;
+  font-size: max(12px, 1.3rem);
   font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8790a3;
 }
 .nm-why__includes ul {
   display: grid;
-  gap: 1.1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 2.8rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .nm-why__includes li {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+  gap: 1.4rem;
   font-size: max(14px, 1.6rem);
-  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.35;
+  color: var(--nm-ink);
 }
-.nm-why__includes li::before {
-  margin-top: 0.15em;
+.nm-js .nm-why__includes li {
+  opacity: 0;
+  transform: translateY(1.2rem);
+  transition: opacity 0.6s var(--nm-ease) calc(var(--d) + 0.2s), transform 0.6s var(--nm-ease) calc(var(--d) + 0.2s);
+}
+.nm-js .nm-why__includes.is-in li {
+  opacity: 1;
+  transform: none;
+}
+.nm-why__ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 4rem;
+  height: 4rem;
+  background: #eaf1fc;
+  color: var(--nm-blue);
+  transition: background-color 0.3s, color 0.3s;
+}
+.nm-why__ico svg {
+  width: 2rem;
+  height: 2rem;
+}
+.nm-why__includes li:hover .nm-why__ico {
+  background: var(--nm-blue);
+  color: #fff;
 }
 
 /* ---------- Shared section shell ---------- */
@@ -1586,6 +1624,7 @@
   .nm-book__layout { grid-template-columns: 1fr; }
   .nm-book__summary { position: static; }
   .nm-how__list { grid-template-columns: repeat(2, 1fr); row-gap: 5rem; }
+  .nm-why__includes ul { grid-template-columns: 1fr; gap: 1.6rem; }
 }
 @media screen and (max-width: 767px) {
   .nm-hero-eyebrow { grid-area: 1 / 1 / 2 / 3; margin-top: calc(16svh - 3.6rem); }
@@ -1625,7 +1664,8 @@
   .nm-cal__days { grid-template-columns: repeat(4, 1fr); }
   .nm-how__list { grid-template-columns: 1fr; }
   .nm-book__title { font-size: 3.6rem; }
-  .nm-why__includes { margin-top: 3rem; }
+  .nm-why__includes { margin-top: 4rem; }
+  .nm-why__includes ul { grid-template-columns: 1fr; gap: 1.6rem; }
 }
 @media screen and (max-width: 476px) {
   .nm-sec__title { font-size: 3.2rem; }
@@ -1636,7 +1676,8 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .nm-js [data-nm-reveal],
-  .nm-js .nm-map__list li { opacity: 1; transform: none; transition: none; }
+  .nm-js .nm-map__list li,
+  .nm-js .nm-why__includes li { opacity: 1; transform: none; transition: none; }
   .nm-map__arc { stroke-dashoffset: 0; transition: none; }
   .nm-map__ship,
   .nm-book__route-line i { display: none; }
