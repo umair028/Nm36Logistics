@@ -590,27 +590,7 @@
     });
   }
 
-  // The site's scroll timeline only lifts the hero headline (yPercent -65), so the eyebrow above it
-  // got covered and the intro below was left behind. Mirror the headline's offset onto both.
-  function setupHeroSync() {
-    var title = document.querySelector(".home-hero .home-hero__title");
-    var followers = document.querySelectorAll(".nm-hero-eyebrow, .nm-hero-lead");
-    if (!title || !followers.length) return;
-    var last = null;
-    (function frame() {
-      requestAnimationFrame(frame);
-      if (window.pageYOffset > window.innerHeight * 2.5) return; // hero is long gone
-      var m = new DOMMatrixReadOnly(getComputedStyle(title).transform);
-      var y = Math.round(m.m42 * 10) / 10;
-      if (y !== last) {
-        last = y;
-        for (var i = 0; i < followers.length; i++) followers[i].style.transform = y ? "translate3d(0," + y + "px,0)" : "";
-      }
-    })();
-  }
-
   function init() {
-    setupHeroSync();
     document.querySelectorAll("[data-nm-marquee]").forEach(setupMarquee);
     document.querySelectorAll("[data-nm-graph]").forEach(setupGraph);
     document.querySelectorAll("[data-nm-book]").forEach(setupBooking);
