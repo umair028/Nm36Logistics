@@ -476,81 +476,219 @@ body {
   align-self: center;
   justify-self: end;
   width: 100%;
-  max-width: 50rem;
+  max-width: max(52rem, 410px); /* stays readable on laptop widths where rem is small */
   margin-top: 8rem;
-  overflow: hidden;
-  border-radius: 1rem;
-  background: #fff;
-  box-shadow: 0 2.4rem 6rem rgba(7, 29, 69, 0.35);
+  padding: 2.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 2.2rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.97), rgba(246, 249, 255, 0.95));
+  box-shadow: 0 3rem 8rem rgba(4, 16, 42, 0.45), 0 0 0 1px rgba(11, 42, 107, 0.04);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
   font-family: HelveticaNowDisplay, sans-serif;
   color: #0b1a3c;
+  animation: nm-quote-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.4s both;
 }
+@keyframes nm-quote-in {
+  from { opacity: 0; transform: translateY(3rem) scale(0.98); }
+}
+.nm-quote__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.6rem;
+  margin-bottom: 2rem;
+}
+.nm-quote__title {
+  font-size: max(17px, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.nm-quote__sub {
+  margin-top: 0.4rem;
+  font-size: max(12px, 1.4rem);
+  color: #6b7790;
+}
+.nm-quote__badge {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 0.7rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 10rem;
+  background: #e3f5ea;
+  font-size: max(11px, 1.2rem);
+  font-weight: 500;
+  white-space: nowrap;
+  color: #1d7a45;
+}
+.nm-quote__badge i {
+  position: relative;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #22a35a;
+}
+.nm-quote__badge i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: #22a35a;
+  animation: nm-quote-ping 1.8s ease-out infinite;
+}
+@keyframes nm-quote-ping {
+  to { transform: scale(3); opacity: 0; }
+}
+/* segmented tabs with a sliding indicator */
 .nm-quote__tabs {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background: #eef2f8;
+  padding: 0.5rem;
+  border-radius: 1.2rem;
+  background: #edf1f8;
+}
+.nm-quote__tab-ink {
+  position: absolute;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  width: calc(50% - 0.5rem);
+  border-radius: 0.9rem;
+  background: #fff;
+  box-shadow: 0 0.4rem 1.2rem rgba(11, 42, 107, 0.12);
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.nm-quote__tabs[data-active="track"] .nm-quote__tab-ink {
+  transform: translateX(100%);
 }
 .nm-quote__tab {
-  padding: 1.8rem 1rem;
+  position: relative;
+  z-index: 1;
+  padding: 1.2rem 1rem;
   border: 0;
-  border-bottom: 2px solid transparent;
   background: transparent;
   font: inherit;
-  font-size: 1.6rem;
+  font-size: max(14px, 1.5rem);
   font-weight: 500;
-  color: #5b6782;
+  color: #6b7790;
   cursor: pointer;
-  transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+  transition: color 0.3s;
 }
-.nm-quote__tab:hover {
-  color: #0b1a3c;
-}
+.nm-quote__tab:hover,
 .nm-quote__tab.is-active {
-  background: #fff;
-  border-bottom-color: var(--nm-blue);
   color: #0b1a3c;
 }
 .nm-quote__tab:focus-visible,
 .nm-quote__submit:focus-visible {
   outline: 2px solid var(--nm-blue);
-  outline-offset: -4px;
+  outline-offset: 2px;
 }
 .nm-quote__panel {
-  padding: 2.4rem 2.4rem 2rem;
+  padding-top: 2.2rem;
+}
+.nm-quote__panel.is-active {
+  animation: nm-quote-panel 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes nm-quote-panel {
+  from { opacity: 0; transform: translateY(0.8rem); }
 }
 .nm-quote__panel[hidden] {
   display: none;
 }
+.nm-quote__track-intro {
+  margin-bottom: 1.8rem;
+  font-size: max(13px, 1.5rem);
+  line-height: 1.5;
+  color: #5b6782;
+}
+/* origin → destination row */
+.nm-quote__route {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+.nm-quote__route-arrow {
+  position: absolute;
+  left: 50%;
+  bottom: 1.3rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-left: -1.5rem;
+  border: 1px solid #d3dcea;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--nm-blue);
+  box-shadow: 0 0.4rem 1rem rgba(11, 42, 107, 0.1);
+}
+.nm-quote__route-arrow svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: nm-quote-nudge 2.4s ease-in-out infinite;
+}
+@keyframes nm-quote-nudge {
+  0%, 100% { transform: translateX(-1px); }
+  50% { transform: translateX(2px); }
+}
 .nm-quote__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.6rem 1.4rem;
+  gap: 1.6rem 1.2rem;
 }
 .nm-quote__field {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.7rem;
   min-width: 0;
 }
 .nm-quote__field--wide {
   grid-column: 1 / -1;
 }
 .nm-quote__label {
-  font-size: 1.4rem;
+  font-size: max(11px, 1.2rem);
   font-weight: 500;
-  color: #3b4763;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b7790;
+}
+.nm-quote__control {
+  position: relative;
+}
+.nm-quote__ico {
+  position: absolute;
+  top: 50%;
+  left: 1.4rem;
+  width: 1.8rem;
+  height: 1.8rem;
+  transform: translateY(-50%);
+  color: #8a99b4;
+  pointer-events: none;
+  transition: color 0.3s;
+}
+.nm-quote__control:focus-within .nm-quote__ico {
+  color: var(--nm-blue);
 }
 .nm-quote__input {
   width: 100%;
-  height: 4.8rem;
-  padding: 0 1.4rem;
-  border: 1px solid #d3dcea;
-  border-radius: 0.6rem;
+  height: 5rem;
+  padding: 0 1.4rem 0 4.2rem;
+  border: 1px solid #d8e0ec;
+  border-radius: 1.1rem;
   background-color: #fff;
   font: inherit;
-  font-size: 1.5rem;
+  font-size: max(14px, 1.5rem);
   color: #0b1a3c;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+.nm-book .nm-quote__input {
+  padding-left: 1.4rem; /* booking fields have no icon */
 }
 select.nm-quote__input {
   appearance: none;
@@ -563,6 +701,9 @@ select.nm-quote__input {
   text-overflow: ellipsis;
   cursor: pointer;
 }
+.nm-quote__route select.nm-quote__input {
+  padding-right: 3rem;
+}
 .nm-quote__input::placeholder {
   color: #8f9ab0;
 }
@@ -572,36 +713,92 @@ select.nm-quote__input {
 .nm-quote__input:focus {
   outline: none;
   border-color: var(--nm-blue);
-  box-shadow: 0 0 0 3px rgba(30, 91, 198, 0.15);
+  box-shadow: 0 0 0 4px rgba(30, 91, 198, 0.14);
 }
 .nm-quote__input.is-invalid {
   border-color: #d64545;
+  box-shadow: 0 0 0 4px rgba(214, 69, 69, 0.12);
 }
 .nm-quote__submit {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
   width: 100%;
-  height: 5.4rem;
+  height: 5.6rem;
   margin-top: 2.2rem;
+  overflow: hidden;
   border: 0;
-  border-radius: 0.6rem;
-  background: var(--nm-navy);
+  border-radius: 1.2rem;
+  background: linear-gradient(135deg, var(--nm-navy) 0%, var(--nm-blue) 100%);
   font: inherit;
-  font-size: 1.6rem;
+  font-size: max(15px, 1.6rem);
   font-weight: 500;
   color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s;
+  box-shadow: 0 1.2rem 2.8rem rgba(30, 91, 198, 0.35);
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.3s;
+}
+/* light sweep across the button on hover */
+.nm-quote__submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 .nm-quote__submit:hover {
-  background: var(--nm-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 1.6rem 3.2rem rgba(30, 91, 198, 0.45);
+}
+.nm-quote__submit:hover::before {
+  left: 120%;
+}
+.nm-quote__submit svg {
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.nm-quote__submit:hover svg {
+  transform: translateX(0.4rem);
 }
 .nm-quote__note {
-  margin-top: 1.4rem;
-  font-size: 1.3rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem 1.8rem;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: max(12px, 1.3rem);
   color: #6b7790;
+}
+.nm-quote__note li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.nm-quote__note li::before {
+  content: "";
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 50%;
+  background: #e3f5ea url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4.5 8.2 2.3 2.3 4.7-5' fill='none' stroke='%231d7a45' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 80% no-repeat;
 }
 .nm-quote__popup {
   display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nm-quote,
+  .nm-quote__panel.is-active,
+  .nm-quote__route-arrow svg,
+  .nm-quote__badge i::after { animation: none; }
+  .nm-quote__tab-ink,
+  .nm-quote__submit,
+  .nm-quote__submit::before { transition: none; }
 }
 
 @media screen and (max-width: 991px) {
@@ -622,7 +819,7 @@ select.nm-quote__input {
   .home-hero__backer {
     grid-area: 3 / 1 / 4 / 13;
   }
-  .nm-quote__input { font-size: 1.6rem; }
+  .nm-quote__input { font-size: max(16px, 1.6rem); }
 }
 @media screen and (max-width: 767px) {
   .home-hero__wrap {
@@ -632,25 +829,18 @@ select.nm-quote__input {
   .nm-quote {
     grid-area: 2 / 1 / 3 / 3;
     max-width: none;
+    padding: 2.2rem 1.8rem;
+    border-radius: 1.8rem;
   }
-  .home-hero__backer {
-    grid-area: 3 / 1 / 4 / 3;
-  }
-  .nm-quote__tab { font-size: 2rem; padding: 2.2rem 1rem; }
-  .nm-quote__panel { padding: 3rem 3rem 2.6rem; }
-  .nm-quote__grid { gap: 2rem 1.8rem; }
-  .nm-quote__label { font-size: 1.7rem; }
-  .nm-quote__input { height: 6rem; font-size: max(16px, 1.9rem); } /* iOS zooms fields under 16px */
-  .nm-quote__submit { height: 6.6rem; font-size: 2rem; }
-  .nm-quote__note { font-size: 1.6rem; }
+  .nm-quote__head { flex-wrap: wrap; }
+  .nm-quote__tab { font-size: max(14px, 1.9rem); padding: 1.4rem 0.8rem; }
+  .nm-quote__input { height: max(46px, 6rem); font-size: max(16px, 1.9rem); } /* iOS zooms fields under 16px */
+  .nm-quote__submit { height: max(50px, 6.6rem); }
 }
 @media screen and (max-width: 476px) {
-  .nm-quote__tab { font-size: 1.5rem; padding: 1.6rem 0.8rem; }
-  .nm-quote__panel { padding: 2rem 1.6rem 1.8rem; }
+  .nm-quote__route { grid-template-columns: 1fr; gap: 1.4rem; }
+  .nm-quote__route-arrow { display: none; }
   .nm-quote__grid { gap: 1.4rem 1rem; }
-  .nm-quote__label { font-size: 1.3rem; }
-  .nm-quote__input { height: 4.6rem; padding: 0 1.1rem; font-size: max(16px, 1.5rem); }
-  select.nm-quote__input { padding-right: 3rem; background-position: right 1rem center; }
-  .nm-quote__submit { height: 5rem; font-size: 1.5rem; }
-  .nm-quote__note { font-size: 1.2rem; }
+  .nm-quote__input { height: 4.8rem; padding-left: 4rem; font-size: max(16px, 1.5rem); }
+  .nm-quote__submit { height: 5.2rem; }
 }

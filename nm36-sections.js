@@ -158,20 +158,22 @@
         body.innerHTML = '<p class="nm-board__empty">No scheduled sailings on this lane right now. Ask us about a custom booking.</p>';
         return;
       }
-      body.innerHTML = rows.map(function (p) {
+      body.innerHTML = rows.map(function (p, r) {
         var l = p[0];
         var cut = l.daily ? "Daily 14:00" : fmtDay(addDays(today, l.cut));
         var dep = l.daily ? "Daily" : fmtDay(addDays(today, l.dep));
         var sp = SPACE[l.space];
+        // capacity bar: how much of the sailing is already booked
+        var fill = l.space === "full" ? 100 : l.space === "fast" ? 82 + (p[1] % 3) * 4 : 34 + (p[1] % 4) * 8;
         var btn = l.space === "full"
           ? '<button type="button" class="nm-board__btn nm-board__btn--wait" data-lane="' + p[1] + '" data-act="wait">Join waitlist</button>'
           : '<button type="button" class="nm-board__btn" data-lane="' + p[1] + '" data-act="book">Book slot</button>';
-        return '<div class="nm-board__row" role="row">' +
+        return '<div class="nm-board__row" role="row" style="--r:' + r + '">' +
           '<div class="nm-board__lane" role="cell"><strong>' + l.from + " → " + l.to + "</strong><span>" + l.fromCode + " → " + l.toCode + "</span></div>" +
           '<div role="cell"><span class="nm-board__label">Mode</span>' + (l.modeLabel || l.mode) + "</div>" +
           '<div role="cell"><span class="nm-board__label">Cut-off</span>' + cut + "</div>" +
           '<div role="cell"><span class="nm-board__label">Departs</span>' + dep + "</div>" +
-          '<div role="cell"><span class="nm-pill ' + sp[1] + '">' + sp[0] + "</span></div>" +
+          '<div role="cell"><span class="nm-pill ' + sp[1] + '">' + sp[0] + '</span><span class="nm-cap nm-cap--' + l.space + '" title="' + fill + '% booked"><i style="--fill:' + fill + '%"></i></span></div>' +
           btn + "</div>";
       }).join("");
     }
@@ -267,13 +269,13 @@
       var days = [];
       for (var i = 0; i < 14; i++) days.push(addDays(start, i));
       rangeEl.textContent = fmtDay(days[0]) + " – " + fmtDay(days[13]);
-      daysEl.innerHTML = days.map(function (d) {
+      daysEl.innerHTML = days.map(function (d, i) {
         var st = slotStatus(d);
         var afterCut = last && d > last;
         var off = st === "full" || st === "closed" || afterCut;
         var label = afterCut ? "After cut-off" : st === "closed" ? "Closed" : st === "full" ? "Full" : st === "limited" ? "Limited" : "Open";
         var iso = isoDate(d);
-        return '<button type="button" role="radio" class="nm-day is-' + st + '" data-date="' + iso + '" aria-checked="' + (picked.date === iso) + '"' + (off ? " disabled" : "") +
+        return '<button type="button" role="radio" class="nm-day is-' + st + '" style="--r:' + i + '" data-date="' + iso + '" aria-checked="' + (picked.date === iso) + '"' + (off ? " disabled" : "") +
           ' aria-label="' + fmtDay(d) + ", " + label + '"><span>' + WEEKDAYS[d.getDay()] + "</span><strong>" + d.getDate() + "</strong><span>" + label + "</span></button>";
       }).join("");
       renderWindows();
@@ -327,21 +329,33 @@
         ["Insurance", val("insurance") ? "All-risk cover requested" : "Not added"],
       ];
     }
+    var ready = false;
+    function setSum(key, text) {
+      var el = sum[key];
+      if (el.textContent === text) return;
+      el.textContent = text;
+      // briefly highlight values that just changed (not on first paint)
+      if (ready && el.tagName === "DD") {
+        el.classList.remove("is-updated");
+        void el.offsetWidth;
+        el.classList.add("is-updated");
+      }
+    }
     function update() {
       var o = split(val("origin"));
       var dest = val("destination");
       var destCode = picked.lane && picked.lane.destination === dest ? picked.lane.toCode : dest.split(",")[0].slice(0, 3).toUpperCase();
-      sum.originCode.textContent = o.code || o.name.slice(0, 3).toUpperCase();
-      sum.originName.textContent = o.name;
-      sum.destCode.textContent = destCode;
-      sum.destName.textContent = dest;
-      sum.mode.textContent = val("mode") || "Not selected";
-      sum.service.textContent = val("service") || "Not selected";
-      sum.cargo.textContent = val("cargo") || "Not selected";
-      sum.incoterm.textContent = val("incoterm") || "Not selected";
-      sum.date.textContent = picked.date ? fmtDay(new Date(picked.date + "T00:00:00")) : "Not selected";
-      sum.window.textContent = picked.window || "Not selected";
-      sum.insurance.textContent = val("insurance") ? "Added" : "Not added";
+      setSum("originCode", o.code || o.name.slice(0, 3).toUpperCase());
+      setSum("originName", o.name);
+      setSum("destCode", destCode);
+      setSum("destName", dest);
+      setSum("mode", val("mode") || "Not selected");
+      setSum("service", val("service") || "Not selected");
+      setSum("cargo", val("cargo") || "Not selected");
+      setSum("incoterm", val("incoterm") || "Not selected");
+      setSum("date", picked.date ? fmtDay(new Date(picked.date + "T00:00:00")) : "Not selected");
+      setSum("window", picked.window || "Not selected");
+      setSum("insurance", val("insurance") ? "Added" : "Not added");
       review.innerHTML = details().map(function (r) { return "<div><dt>" + r[0] + "</dt><dd>" + r[1] + "</dd></div>"; }).join("");
     }
     form.addEventListener("change", function (e) {
@@ -374,6 +388,8 @@
         s.classList.toggle("is-current", k === step);
         s.classList.toggle("is-done", k < step);
       });
+      var bar = root.querySelector(".nm-book__progress");
+      if (bar) bar.style.setProperty("--p", (step / 5) * 100 + "%");
       back.disabled = step === 1;
       next.textContent = step === 5 ? "Send booking request" : "Continue";
       count.textContent = "Step " + step + " of 5";
@@ -421,6 +437,80 @@
       },
     };
     go(1);
+    ready = true;
+  }
+
+  // Scroll reveal: [data-nm-reveal] fades/slides in once (styles only apply under .nm-js)
+  function setupReveal() {
+    var els = document.querySelectorAll("[data-nm-reveal]");
+    if (!("IntersectionObserver" in window) || reduceMotion.matches) {
+      els.forEach(function (el) { el.classList.add("is-in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-in");
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  // Route map: hovering a market highlights its lane; while idle and on screen it cycles through them
+  function setupMap(map) {
+    var items = Array.prototype.slice.call(map.querySelectorAll("[data-market]"));
+    var svg = map.querySelector("svg");
+    var timer = null, idx = -1, hovering = false, visible = false;
+
+    function activate(key) {
+      if (key) map.setAttribute("data-active", key);
+      else map.removeAttribute("data-active");
+      items.forEach(function (li) { li.classList.toggle("is-active", li.getAttribute("data-market") === key); });
+    }
+    function tick() {
+      idx = (idx + 1) % items.length;
+      activate(items[idx].getAttribute("data-market"));
+    }
+    function startCycle() {
+      if (timer || hovering || !visible || reduceMotion.matches) return;
+      timer = setInterval(tick, 2600);
+    }
+    function stopCycle() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    items.forEach(function (li, i) {
+      var key = li.getAttribute("data-market");
+      function on() { hovering = true; stopCycle(); idx = i; activate(key); }
+      function off() { hovering = false; activate(null); startCycle(); }
+      li.addEventListener("mouseenter", on);
+      li.addEventListener("mouseleave", off);
+      li.addEventListener("focus", on);
+      li.addEventListener("blur", off);
+    });
+    map.querySelectorAll("[data-node]").forEach(function (node) {
+      var key = node.getAttribute("data-node");
+      node.addEventListener("mouseenter", function () { hovering = true; stopCycle(); activate(key); });
+      node.addEventListener("mouseleave", function () { hovering = false; activate(null); startCycle(); });
+    });
+
+    if (reduceMotion.matches && svg && svg.pauseAnimations) svg.pauseAnimations();
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        visible = entries[0].isIntersecting;
+        if (visible) {
+          // let the lanes draw in before the highlight starts moving
+          setTimeout(startCycle, 2400);
+          if (svg && svg.unpauseAnimations && !reduceMotion.matches) svg.unpauseAnimations();
+        } else {
+          stopCycle();
+          activate(null);
+          if (svg && svg.pauseAnimations) svg.pauseAnimations();
+        }
+      }, { threshold: 0.25 }).observe(map);
+    }
   }
 
   // Hero quote / tracking card: tabs; a quote continues in the booking flow, tracking opens the contact popup
@@ -428,7 +518,9 @@
     var tabs = Array.prototype.slice.call(card.querySelectorAll(".nm-quote__tab"));
     var panels = card.querySelectorAll(".nm-quote__panel");
 
+    var tabBar = card.querySelector(".nm-quote__tabs");
     function selectTab(tab) {
+      if (tabBar) tabBar.setAttribute("data-active", tab.getAttribute("data-tab"));
       tabs.forEach(function (t) {
         var active = t === tab;
         t.classList.toggle("is-active", active);
@@ -498,12 +590,34 @@
     });
   }
 
+  // The site's scroll timeline only lifts the hero headline (yPercent -65), so the eyebrow above it
+  // got covered and the intro below was left behind. Mirror the headline's offset onto both.
+  function setupHeroSync() {
+    var title = document.querySelector(".home-hero .home-hero__title");
+    var followers = document.querySelectorAll(".nm-hero-eyebrow, .nm-hero-lead");
+    if (!title || !followers.length) return;
+    var last = null;
+    (function frame() {
+      requestAnimationFrame(frame);
+      if (window.pageYOffset > window.innerHeight * 2.5) return; // hero is long gone
+      var m = new DOMMatrixReadOnly(getComputedStyle(title).transform);
+      var y = Math.round(m.m42 * 10) / 10;
+      if (y !== last) {
+        last = y;
+        for (var i = 0; i < followers.length; i++) followers[i].style.transform = y ? "translate3d(0," + y + "px,0)" : "";
+      }
+    })();
+  }
+
   function init() {
+    setupHeroSync();
     document.querySelectorAll("[data-nm-marquee]").forEach(setupMarquee);
     document.querySelectorAll("[data-nm-graph]").forEach(setupGraph);
     document.querySelectorAll("[data-nm-book]").forEach(setupBooking);
     document.querySelectorAll("[data-nm-board]").forEach(setupBoard);
     document.querySelectorAll("[data-nm-quote]").forEach(setupQuote);
+    document.querySelectorAll("[data-nm-map]").forEach(setupMap);
+    setupReveal();
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
