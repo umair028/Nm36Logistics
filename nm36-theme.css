@@ -19,7 +19,9 @@ body {
   align-items: center;
   text-decoration: none;
 }
+/* hidden until the file loads; the text wordmark shows meanwhile */
 .nm36-logo__img {
+  display: none;
   height: 100%;
   width: auto;
   background: #fff;
@@ -28,7 +30,7 @@ body {
   box-shadow: 0 0.4rem 1.6rem rgba(7, 29, 69, 0.25);
 }
 .nm36-logo__text {
-  display: none;
+  display: flex;
   flex-direction: column;
   line-height: 1;
   color: rgba(var(--header-txt), 1);
@@ -194,9 +196,8 @@ body {
   left: 0;
   bottom: 0;
   width: 100%;
-  height: 1.5rem;
-  border: 1px solid rgba(11, 26, 60, 0.2);
-  border-bottom: none;
+  height: 0;
+  border-top: 1px solid rgba(11, 26, 60, 0.2);
 }
 .nm-about__title {
   font-family: HelveticaNowDisplay, sans-serif;

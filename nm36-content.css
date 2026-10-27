@@ -95,6 +95,8 @@
 }
 .home-hero__backer {
   grid-area: 3 / 1 / 4 / 9;
+  margin-top: 4.8rem; /* clear of the CTA buttons */
+  row-gap: 1.8rem; /* label to logos */
 }
 .nm-quote {
   grid-area: 1 / 10 / 3 / 17;
@@ -558,12 +560,12 @@
 .nm-map__node text,
 .nm-map__origin text {
   font-family: HelveticaNowDisplay, sans-serif;
-  font-size: 15px;
+  font-size: 17px;
   fill: rgba(255, 255, 255, 0.78);
   transition: fill 0.3s;
 }
 .nm-map__origin text {
-  font-size: 17px;
+  font-size: 20px;
   font-weight: 500;
   fill: #fff;
 }
@@ -1837,4 +1839,18 @@
   .nm-board__btn::before,
   .nm-book__back::before,
   .nm-book__next::before { display: none; }
+}
+/* "Talk to our team" under the Why NM36 intro must always show */
+.home-why__head .home-why__btn {
+  display: inline-flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Shift section fleet: top-down trucks in place of the small ships.
+   Sized by width (the truck is ~5:1, the ships were ~2.2:1) so the fleet keeps its footprint */
+.home-shift__main-part--small-ship .container.fluid .home-shift__img-wrap .home-shift__img-inner .home-shift__img-inner-ships .ship-small-svg.nm-truck {
+  width: 36rem;
+  height: auto;
 }
